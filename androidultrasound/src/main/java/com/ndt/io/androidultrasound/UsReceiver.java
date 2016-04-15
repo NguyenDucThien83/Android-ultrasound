@@ -105,6 +105,10 @@ public class UsReceiver {
      */
 static boolean TESTDECODING = false;
     protected FinishType execute(int timeout) {
+        if(recorder.getState() != AudioRecord.STATE_INITIALIZED){
+            exception = new Exception("Cannot initialize audio recorder");
+            return FinishType.FAIL;
+        }
         Log.v(TAG, "execute");
         long maxRead = timeout*Paras.SAMPLE_RATE/1000;
         isStopImmediately = false;
@@ -203,23 +207,6 @@ static boolean TESTDECODING = false;
                     addSignal(chunks);
                     if (countBits >= req_length_getData){
                         byte[] encBody = Arrays.copyOfRange(receiveBits, bodyPos, bodyPos + lengthOfEncBody);
-                        //check
-                        byte[] encBody2 = checkEncBody();
-                        Utils.writeLog(Message.encSendBits, "encSend");
-                        Utils.writeLog(encBody, "encReceive");
-                        Utils.writeLog(encBody2 , "encReceive2");
-                       /* int similarity = Message.getMaxSimilarity(encBody,Message.encSendBits,0, lengthOfEncBody);
-                        Log.v(TAG, " diff between send and R1 " + (lengthOfEncBody - similarity));
-                        if(encBody2 != null){
-                            similarity = Message.getMaxSimilarity(encBody2,Message.encSendBits,0, lengthOfEncBody);
-                            Log.v(TAG, " diff between send and R2 " + (lengthOfEncBody - similarity));
-                            similarity = Message.getMaxSimilarity(encBody2,encBody,0, lengthOfEncBody);
-                            Log.v(TAG, " diff between R2 and R1 " + (lengthOfEncBody - similarity));
-
-                        }*/
-
-
-                        //end check
 
                         receivedMsg = Message.getInstanceData(encBody, infoLength);
                         // finish
@@ -332,14 +319,14 @@ static boolean TESTDECODING = false;
 
     protected boolean initRecorder(){
 
-        int source    = MediaRecorder.AudioSource.DEFAULT;
+        int source    = MediaRecorder.AudioSource.MIC;
         int minBufferSize = AudioRecord.getMinBufferSize(Paras.SAMPLE_RATE,
                 AudioFormat.CHANNEL_IN_MONO, Paras.AUDIO_ENCODING);
         Log.v(TAG, "minBuffer size: " + minBufferSize);
 
         // construct recorder
         recorder = new AudioRecord( source, Paras.SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO,
-                Paras.AUDIO_ENCODING, 8*minBufferSize); // 1 seconds
+                Paras.AUDIO_ENCODING, 2* Paras.SAMPLE_RATE); // 1 seconds
         if(recorder.getState() != AudioRecord.STATE_INITIALIZED){
             Log.v(TAG, "Cannot initialize audio record");
             return  false;
