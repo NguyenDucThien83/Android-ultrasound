@@ -332,14 +332,14 @@ static boolean TESTDECODING = false;
 
     protected boolean initRecorder(){
 
-        int source    = MediaRecorder.AudioSource.MIC;
+        int source    = MediaRecorder.AudioSource.DEFAULT;
         int minBufferSize = AudioRecord.getMinBufferSize(Paras.SAMPLE_RATE,
                 AudioFormat.CHANNEL_IN_MONO, Paras.AUDIO_ENCODING);
         Log.v(TAG, "minBuffer size: " + minBufferSize);
 
         // construct recorder
         recorder = new AudioRecord( source, Paras.SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO,
-                Paras.AUDIO_ENCODING, 2* Paras.SAMPLE_RATE); // 1 seconds
+                Paras.AUDIO_ENCODING, 8*minBufferSize); // 1 seconds
         if(recorder.getState() != AudioRecord.STATE_INITIALIZED){
             Log.v(TAG, "Cannot initialize audio record");
             return  false;
