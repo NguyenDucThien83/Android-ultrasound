@@ -53,7 +53,6 @@ public class UsSender {
             short[] audioSignal = modulate(message.getEncodedMsgBits());
             if(audioSignal == null){
                 exception = new Exception("Cannot encode the message to audio signal");
-                Log.v(TAG, "Cannot encode the message to audio signal");
                 return false;
             }
             totalFrames = audioSignal.length;
@@ -65,8 +64,6 @@ public class UsSender {
 
             // 2. write to buffer
             player.write(audioSignal, 0, audioSignal.length);
-            Log.v(TAG, " audioSignal.length " + audioSignal.length);
-            Log.v(TAG, " timeToPlay " + 1000 * audioSignal.length / player.getSampleRate());
 
 
             //3. play audio
@@ -85,14 +82,8 @@ public class UsSender {
                     Log.v(TAG, " still playing " + count);
 
                 }
-                if(player.getPlayState() == AudioTrack.PLAYSTATE_PLAYING){
-                    Log.v(TAG, "Why does the player not stop?");
-                }
                 Log.v(TAG, "stop player");
                 player.stop();
-                if(player.getPlayState() == AudioTrack.PLAYSTATE_PLAYING){
-                    Log.v(TAG, "Why does the player not stop?");
-                }else Log.v(TAG, "player is stopped");
 
             }catch(Exception e) {
                 exception = e;

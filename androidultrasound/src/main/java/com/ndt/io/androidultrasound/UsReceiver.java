@@ -297,24 +297,6 @@ static boolean TESTDECODING = false;
 
     }
 
-    byte[] checkEncBody(){
-        int[] pos = demodulator.findTheFisrtPosition(buffer,0,countBuffer);
-        byte[] bits = demodulator.demodulate(buffer, 0, countBuffer, pos);
-        int synPos = Utils.findSample(bits, Message.SYN, 0, REQ_LENGTH_CHECK_SYN_AND_LENGTH);
-        int bodyPos = synPos+ Message.LENGTH_SYN + Message.LENGTH_INFO_LENGTH;
-        byte[] infoLength = Arrays.copyOfRange(bits,
-                synPos + Message.LENGTH_SYN, bodyPos);
-
-        int lengthOfEncBody = ErrorCorrection.rs16DecodeToaInt(infoLength);
-        Log.v(TAG, "lengthOfEncBody: " + lengthOfEncBody);
-        if(lengthOfEncBody<0){
-            return null;
-        }
-        byte[] encBody = Arrays.copyOfRange(bits, bodyPos, bodyPos + lengthOfEncBody);
-        return  encBody;
-    }
-
-
     /* player*/
 
     protected boolean initRecorder(){

@@ -98,11 +98,7 @@ public class DataExchange extends AsyncTask<Void,UsChannelState,Boolean> {
                     else action = Action.SEND_SYN;
                     break;
                 case SEND_DATA:
-                  /*  try {
-                        Thread.sleep(300);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }*/
+
                     Log.v(TAG, "start sending DATA");
                     //publishProgress("Sending Data");
                     publishProgress(UsChannelState.SENDING_DATA);
@@ -120,8 +116,6 @@ public class DataExchange extends AsyncTask<Void,UsChannelState,Boolean> {
                     break;
                 case RECEIVE_DATA:
                     Log.v(TAG, "start receiving DATA");
-                    //publishProgress("Receiving Data");
-                    //publishProgress(UsChannelState.RECEIVING_DATA);
                     int timeout = sendMsg.getTimeToSend();
                     Message message =  receiver.receive(timeout);
                     if (message != null && message.getType() == Message.MessageType.DATA){

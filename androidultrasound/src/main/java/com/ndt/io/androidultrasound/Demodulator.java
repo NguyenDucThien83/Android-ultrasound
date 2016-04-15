@@ -146,21 +146,6 @@ class Demodulator extends Modulator {
         double[] corrsZero = getCorrelations(signal, symbolLength, startCheck, checkLen, 0);
         double[] corrsOne  = getCorrelations(signal, symbolLength, startCheck, checkLen, 1);
 
-        /*
-        double shape[] = new double[symbolLength] ;
-        for (int i = 0; i <  symbolLength; i++){
-            shape[i] = 0;
-            for(int j = 0; j< numCheckBits; j++){
-                shape[i] += corrsZero[j*symbolLength + i] + corrsOne[j*symbolLength + i];
-            }
-        }
-        if (UsReceiver.TESTDECODING){
-            UsReceiver.TESTDECODING = false;
-            Utils.writeCSV("2shape.csv", shape, shape.length);
-            Utils.writeCSV("2corrsZero.csv", corrsZero, corrsZero.length);
-            Utils.writeCSV("2corrsOne.csv", corrsOne, corrsOne.length);
-        }*/
-
         double maxZero = 0;
         double maxOne = 0;
         for (int i = 0; i <  symbolLength; i++){
